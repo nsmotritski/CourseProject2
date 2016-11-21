@@ -24,7 +24,9 @@ public class CatalogOnlinerTVsPage extends BaseForm{
     }
 
     public void waitSearchResultsLoaded() {
-        searchResults.waitForIsElementPresent();
+        browser.waitForListOfElements(searchResultsDiv,".//div[@id='schema-products']//div[contains(@class,'title')]");
+        //searchResults = searchResultsDiv.getElementsURLs(By.xpath(".//div[@id='schema-products']//div[contains(@class,'title')]"));
+        //searchResults.waitForIsElementPresent();
     }
 
     public void setManufacturerFilter () {
@@ -95,8 +97,11 @@ public class CatalogOnlinerTVsPage extends BaseForm{
         catalogContents = getCatalogContents();
         catalogMinPrices = getCatalogMinPrices();
         for (int i = 0; i < catalogHeaders.size();i++) {
-            doAssert(checkTextContains(catalogHeaders.get(i),manufacturerFilterValue),"Element" + (i+1) + "manufacturer OK","Element" + (i+1) + "manufacturer KO");
-            doAssert((getTVDiagonal(catalogContents.get(i))>=diagonalFromFilterValue) && (getTVDiagonal(catalogContents.get(i))<=diagonalToFilterValue),"Element" + (i+1) + "diagonal OK","Element" + (i+1) + "diagonal KO");
+            doAssert(checkTextContains(catalogHeaders.get(i),manufacturerFilterValue),
+                    "Element" + (i+1) + "manufacturer OK","Element" + (i+1) + "manufacturer KO");
+            doAssert((getTVDiagonal(catalogContents.get(i))>=diagonalFromFilterValue) &&
+                            (getTVDiagonal(catalogContents.get(i))<=diagonalToFilterValue),
+                    "Element" + (i+1) + "diagonal OK","Element" + (i+1) + "diagonal KO");
         }
 
     }
