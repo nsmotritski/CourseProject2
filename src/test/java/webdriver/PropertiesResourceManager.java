@@ -1,5 +1,7 @@
 package webdriver;
 
+import org.jsoup.Connection;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -7,7 +9,7 @@ import java.util.Properties;
 /**
  * Class-wrapper for working with properties-файлами Для доступа к файлам используется относительный путь (имя ресурса)
  */
-public final class PropertiesResourceManager {
+public final class PropertiesResourceManager extends BaseEntity {
 
 	/**
 	 * @uml.property name="properties"
@@ -87,5 +89,10 @@ public final class PropertiesResourceManager {
 	 */
 	public void setProperty(final String key, final String value) {
 		properties.setProperty(key, value);
+	}
+
+	@Override
+	protected String formatLogMsg(String message) {
+		return message;
 	}
 }
