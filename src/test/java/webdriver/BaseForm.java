@@ -1,6 +1,9 @@
 package webdriver;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.openqa.selenium.By;
 import org.testng.Assert;
 
@@ -99,6 +102,15 @@ public abstract class BaseForm extends BaseEntity {
 		}
 	}
 
+	public String getMatchWithPattern (String text, String stringPattern) {
+		Pattern pattern = Pattern.compile(stringPattern);
+		Matcher matcher = pattern.matcher(text);
+		String result = "";
+		while (matcher.find()) {
+			result = matcher.group(1);
+		}
+		return result;
+	}
     
 	
 

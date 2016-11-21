@@ -16,7 +16,6 @@ public class CatalogOnlinerTVsPage extends BaseForm{
     private List<String> catalogHeaders;
     private List<String> catalogContents;
     private List<String> catalogMinPrices;
-    private Label searchResults = new Label(By.xpath(".//*[@id='schema-products']/div"));
 
 
     public CatalogOnlinerTVsPage() {
@@ -25,8 +24,6 @@ public class CatalogOnlinerTVsPage extends BaseForm{
 
     public void waitSearchResultsLoaded() {
         browser.waitForListOfElements(searchResultsDiv,".//div[@id='schema-products']//div[contains(@class,'title')]");
-        //searchResults = searchResultsDiv.getElementsURLs(By.xpath(".//div[@id='schema-products']//div[contains(@class,'title')]"));
-        //searchResults.waitForIsElementPresent();
     }
 
     public void setManufacturerFilter () {
@@ -92,16 +89,23 @@ public class CatalogOnlinerTVsPage extends BaseForm{
         return result;
     }
 
+    private double getTVMinPrice (String s) {
+        double price =  Double.parseDouble(getMatchWithPattern(s,"[0-9]{1,4}[,][0-9]{2}"));
+        return price;
+    }
+
     public void productsFilteredCorrectly (String manufacturerFilterValue, int maxPriceFilterValue, int diagonalFromFilterValue, int diagonalToFilterValue) {
         catalogHeaders = getCatalogHeaders();
         catalogContents = getCatalogContents();
         catalogMinPrices = getCatalogMinPrices();
         for (int i = 0; i < catalogHeaders.size();i++) {
             doAssert(checkTextContains(catalogHeaders.get(i),manufacturerFilterValue),
-                    "Element" + (i+1) + "manufacturer OK","Element" + (i+1) + "manufacturer KO");
+                    "Element " + (i+1) + " manufacturer OK "," Element " + (i+1) + " manufacturer KO");
             doAssert((getTVDiagonal(catalogContents.get(i))>=diagonalFromFilterValue) &&
                             (getTVDiagonal(catalogContents.get(i))<=diagonalToFilterValue),
-                    "Element" + (i+1) + "diagonal OK","Element" + (i+1) + "diagonal KO");
+                    "Element " + (i+1) + " diagonal OK","Element " + (i+1) + " diagonal KO");
+            doAssert(getTVMinPrice(catalogMinPrices.get(i))<=maxPriceFilterValue,
+                    "Element " + (i+1) + " price OK","Element " + (i+1) + " price KO");
         }
 
     }
